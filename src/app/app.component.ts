@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { AppService } from './services/app.service';
 Chart.register(...registerables);
 @Component({
   selector: 'app-root',
@@ -8,7 +9,11 @@ Chart.register(...registerables);
 })
 export class AppComponent implements OnInit {
   title = 'front_end';
+  constructor(private service: AppService) {}
   ngOnInit(): void {
+    this.service.listeLicense().subscribe((res) => {
+      console.log(res);
+    });
     var myChart = new Chart('myChart', {
       type: 'bar',
       data: {
