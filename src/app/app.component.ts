@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Data } from './Interfaces/data';
 import { AppService } from './services/app.service';
 Chart.register(...registerables);
@@ -33,8 +34,12 @@ export class AppComponent implements OnInit, OnDestroy {
   data: Data[] = [];
   typeChart: any = 'pie';
   chart: any;
-  constructor(private service: AppService) {}
+  constructor(
+    private service: AppService,
+    private spinner: NgxSpinnerService
+  ) {}
   ngOnInit(): void {
+    this.spinner.show();
     this.chart = new Chart('MyChart', {
       type: this.typeChart,
       data: {
@@ -55,23 +60,29 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   listeLicense(quantite?: number) {
+    this.spinner.show();
     this.observer1 = this.service.listeLicense(quantite).subscribe(
       (res) => {
         this.updateData(res);
+        this.spinner.hide();
       },
       (error: any) => {
         console.log(error);
+        this.spinner.hide();
       }
     );
   }
 
   listeLanguage(quantite?: number) {
+    this.spinner.show();
     this.observer2 = this.service.listeLanguage(quantite).subscribe(
       (res) => {
         this.updateData(res);
+        this.spinner.hide();
       },
       (error: any) => {
         console.log(error);
+        this.spinner.hide();
       }
     );
   }

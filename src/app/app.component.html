@@ -37,6 +37,21 @@
   <br />
   <div class="row">
     <div class="col-lg-5"></div>
-    <button class="col-lg-1 btn btn-success" (click)="getData()">Ok</button>
+    <button
+      class="col-lg-1 btn btn-success"
+      [disabled]="inputQuantity < 0"
+      (click)="getData()"
+    >
+      Ok
+    </button>
   </div>
 </div>
+
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="true"
+  ><p style="color: white">Loading...</p></ngx-spinner
+>
