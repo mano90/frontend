@@ -1,3 +1,42 @@
 <div class="chart-container">
   <canvas id="MyChart">{{ chart }}</canvas>
 </div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="form-group col-lg-1"></div>
+    <div class="form-group col-lg-3">
+      <label for="">Type de graphe</label>
+      <select
+        name="inputTypeChart"
+        [(ngModel)]="inputTypeChart"
+        class="form-control"
+      >
+        <option value="pie">Pie chart</option>
+        <option value="bar">Bar chart</option>
+      </select>
+    </div>
+    <div class="form-group col-lg-3">
+      <label for="">Type de données</label>
+      <select name="dataType" [(ngModel)]="dataType" class="form-control">
+        <option value="license">Licence</option>
+        <option value="language">Language</option>
+      </select>
+    </div>
+    <div class="form-group col-lg-3">
+      <label for="">Nombre</label>
+      <input
+        type="number"
+        pattern="[0-9]+"
+        name="nombre"
+        [(ngModel)]="inputQuantity"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-lg-5"></div>
+    <button class="col-lg-1 btn btn-success" (click)="getData()">Ok</button>
+  </div>
+</div>

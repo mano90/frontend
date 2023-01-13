@@ -22,6 +22,14 @@ export class AppComponent implements OnInit, OnDestroy {
     '#395144',
     '#182747',
   ];
+  inputTypeChart: string = 'pie';
+  lastQuantity: number = 0;
+  inputQuantity: number = 0;
+  lastDataType: string = 'license';
+  dataType: string = 'license';
+
+  observer1: any;
+  observer2: any;
   data: Data[] = [];
   typeChart: any = 'pie';
   chart: any;
@@ -47,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   listeLicense(quantite?: number) {
-    this.service.listeLicense(quantite).subscribe(
+    this.observer1 = this.service.listeLicense(quantite).subscribe(
       (res) => {
         this.updateData(res);
       },
@@ -58,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   listeLanguage(quantite?: number) {
-    this.service.listeLanguage(quantite).subscribe(
+    this.observer2 = this.service.listeLanguage(quantite).subscribe(
       (res) => {
         this.updateData(res);
       },
@@ -82,5 +90,53 @@ export class AppComponent implements OnInit, OnDestroy {
     this.chart.update();
   }
 
-  ngOnDestroy(): void {}
+  getData() {
+    if (
+      this.typeChart != this.inputTypeChart ||
+      this.inputQuantity != this.lastQuantity ||
+      this.dataType != this.lastDataType
+    ) {
+      if (this.typeChart != this.inputTypeChart) {
+        this.inputTypeChart === 'pie'
+          ? (this.chart.config.type = 'pie')
+          : (this.chart.config.type = 'bar');
+        if (this.inputTypeChart === 'pie') {
+          this.chart.options = {
+            aspectRatio: 2.5,
+          };
+        }
+        this.typeChart = this.inputTypeChart;
+        this.chart.update();
+      }
+
+      if (this.dataType != this.lastDataType) {
+        this.lastDataType = this.dataType;
+
+        this.chart.data.datasets.forEach((dataset: any) => {
+          dataset.label = this.dataType;
+        });
+
+        if (this.dataType === 'license') {
+          this.listeLicense();
+        } else {
+          this.listeLanguage();
+        }
+      }
+
+      if (this.inputQuantity != this.lastQuantity) {
+        this.lastQuantity = this.inputQuantity;
+        if (this.lastDataType === 'language') {
+          this.listeLanguage(this.inputQuantity);
+        } else {
+          this.listeLicense(this.inputQuantity);
+        }
+      }
+      this.lastQuantity = this.inputQuantity;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.observer1.unsubscribe();
+    this.observer2.unsubscribe();
+  }
 }
